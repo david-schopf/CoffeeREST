@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<buildpath>
+	<buildpathentry kind="src" path="features/bootstrap"/>
+	<buildpathentry kind="src" path="public/examples/_001_helloworld"/>
+	<buildpathentry kind="src" path="public/examples/_002_minimal"/>
+	<buildpathentry kind="src" path="public/examples/_003_multiformat"/>
+	<buildpathentry kind="src" path="public/examples/_004_error_response"/>
+	<buildpathentry kind="src" path="public/examples/_005_protected_api"/>
+	<buildpathentry kind="src" path="public/examples/_006_routing"/>
+	<buildpathentry kind="src" path="public/examples/_007_crud"/>
+	<buildpathentry kind="src" path="public/examples/_008_documentation"/>
+	<buildpathentry kind="src" path="public/examples/_009_rate_limiting"/>
+	<buildpathentry kind="src" path="public/examples/_010_access_control"/>
+	<buildpathentry kind="src" path="public/examples/_011_versioning"/>
+	<buildpathentry kind="src" path="public/examples/_012_vendor_mime"/>
+	<buildpathentry kind="src" path="public/examples/_013_html"/>
+	<buildpathentry kind="src" path="public/examples/_014_oauth2_client"/>
+	<buildpathentry kind="src" path="public/examples/_015_oauth2_server"/>
+	<buildpathentry kind="src" path="public/examples/_016_forms"/>
+	<buildpathentry kind="src" path="public/examples/resources"/>
+	<buildpathentry kind="src" path="public/tests/param"/>
+	<buildpathentry kind="src" path="public/tests/request_data"/>
+	<buildpathentry kind="src" path="vendor"/>
+	<buildpathentry kind="src" path="views"/>
+	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>
+</buildpath>
