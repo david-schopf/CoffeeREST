@@ -1,9 +1,9 @@
 <?php
 
 function resultToJSON($result) {
-    
-    while ($line = mysql_fetch_assoc($result)) {
-     $json[] = $line;   
+	    
+    while ($data = $result->fetch_assoc()) {
+     $json[] = $data;   
     }
            
     return $json;
@@ -16,6 +16,7 @@ function connectToDB() {
 		$db_user = "android_kugler"; //Name of database user
 		$db_pass = "6aAiX0XiuC"; //Password for database user
 		
-		$db= new Database($db_host, $db_user, $db_pass, $db_name);
-		$db->connect();
+		$database= new Database($db_host, $db_user, $db_pass, $db_name);
+		$db = $database->getConnection();
+		return $db;
 }

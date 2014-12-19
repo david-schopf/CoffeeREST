@@ -11,23 +11,15 @@ class Database {
 		$this->user = $user;
 		$this->pass = $pass;
 		$this->db = $db;
+		$this->connect();
 	}
-	public function connect() {
-		$this->connection = mysql_connect ( $thus->server, $this->user, $this->pass );
-		if ($this->connection) {
-			mysql_select_db ( $this->db );
-		}
-		
-		return $this->connection;
+
+	private function connect() {
+		$this->connection =  new mysqli($this->server, $this->user, $this->pass, $this->db);
 	}
 	
 	public function getConnection() {
-		if (!$this->connection) {
-	 connect();
-		}
-		return $this->connection;
-	
-		
+		return $this->connection;	
 	}
     
     

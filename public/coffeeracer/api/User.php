@@ -5,41 +5,42 @@ require_once __DIR__."/Functions.php";
 
 class User {
     
-    function test() {
-        return "success";
+    function test($to) {
+        return "success $to";
     }
 	
 	function users() {
         
 		
-        connectToDB();
+        $db = connectToDB();
+
+
+        $result = $db->query("SElECT id, user_name, display_name, email, coffee_count, guthaben FROM coffee_user_users");
         
-        $result = mysql_query("SElECT id, user_name, display_name, email, coffee_count, guthaben FROM coffee_user_users");
-        
-        
-        
+          
         return resultToJSON($result);
         
         
-	}
+	} 
     
-    function user($id) {
+    function data($userID) {
+
         
-        connectToDB();
-        
-        $result = mysql_query("SElECT id, user_name, display_name FROM coffee_user_users WHERE id=$id");
+        $db = connectToDB();
+        $query = "SElECT id, user_name, display_name, email, coffee_count, guthaben FROM coffee_user_users WHERE id=".$userID;
+        $result = $db->query($query);
                 
         return resultToJSON($result);
         
     }
 
     function coffees($id) {
-         connectToDB();
+         $db = connectToDB();
         
-        $result = mysql_query("SElECT id, preis, timestamp FROM coffee_user_users WHERE userID=$id");
+        $result = $db->query("SElECT id, preis, timestamp FROM coffee_user_users WHERE userID=$id");
                 
         return resultToJSON($result);
         
-    }
+    }  
 
 }

@@ -10,18 +10,24 @@ class Coffee {
    const PRICE_SMALL = 60;
    const PRICE_LARGE = 80;
 
-	public function buy($num_small, $num_large, ) {
+	public function postBuy($userID, $num_small=1, $num_large=0) {
 
-		connectToDB();
+	
+		$db = connectToDB();
 		// Small coffees
-		for ($i = 0; $i<num_small; $i++) {
-			  $query = "INSERT INTO `android_kugler`.`coffee_coffees` (`preis`,`typ`, `timestamp`) VALUES (".self::PRICE_SMALL.",". self::SMALL.",".time().")" );
+		for ($i = 0; $i<$num_small; $i++) {
+			  $query = "INSERT INTO `android_kugler`.`coffee_coffees` (`preis`,`typ`, `timestamp`, `userID`) VALUES (".self::PRICE_SMALL.",". self::SMALL.",".time().",".$userID.")" ;
+			  $db->query($query);
+			 
 		}
 
 		// Large coffees 
-		  for (ji = 0; $j<num_small; $j++) {
-			  $query = "INSERT INTO `android_kugler`.`coffee_coffees` (`preis`,`typ`, `timestamp`) VALUES (".self::PRICE_LARGE.",". self::LARGE.",".time().")" );
+		  for ($j = 0; $j<$num_large; $j++) {
+			  $query = "INSERT INTO `android_kugler`.`coffee_coffees` (`preis`,`typ`, `timestamp`, `userID`) VALUES (".self::PRICE_LARGE.",". self::LARGE.",".time().",".$userID.")" ;
 		}
+
+		
+		return array("coffee" => "replace_with_coffee_json_object");
 
 	}
 
