@@ -5,11 +5,11 @@ require_once __DIR__."/Functions.php";
 
 class User {
     
-    function test($to) {
+    public function test($to) {
         return "success $to";
     }
 	
-	function users() {
+	public function users() {
         
 		
         $db = connectToDB();
@@ -23,7 +23,7 @@ class User {
         
 	} 
     
-    function data($userID) {
+    public function data($userID) {
 
         
         $db = connectToDB();
@@ -34,13 +34,31 @@ class User {
         
     }
 
-    function coffees($id) {
+    public function coffees($userID) {
          $db = connectToDB();
         
-        $result = $db->query("SElECT id, preis, timestamp FROM coffee_user_users WHERE userID=$id");
+        $result = $db->query("SElECT id, preis, timestamp, userID FROM coffee_coffees WHERE userID=".$userID);
                 
         return resultToJSON($result);
         
     }  
+
+    public function reinigungen($userID) {
+
+        $db = connectToDB();
+        $query = "SELECT `id`, `termin`, `name`, `status` FROM `android_kugler`.`coffee_reinigungen` WHERE  `id`=$userID;";
+        $result = $db->query($query);
+                
+        return resultToJSON($result);
+    }
+
+    public function postAufladen($userID, $betrag, $code) {
+
+        $db = connectToDB();
+
+        $db->query("INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`) VALUES ($userID, $betrag, NOW(), $code); ")
+
+        return "Aufgeladen";
+    }
 
 }

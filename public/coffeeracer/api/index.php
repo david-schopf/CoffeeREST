@@ -21,5 +21,6 @@ ini_set("display_errors",1);
 $r = new Restler();
 $r->addAPIClass('User');
 $r->addAPIClass('Coffee');
+$r->addAPIClass('Reinigung');
 $r->handle();
 

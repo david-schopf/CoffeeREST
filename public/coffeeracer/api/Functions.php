@@ -20,3 +20,4 @@ function connectToDB() {
 		$db = $database->getConnection();
 		return $db;
 }
+
