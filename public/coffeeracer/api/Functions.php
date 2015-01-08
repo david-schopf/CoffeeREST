@@ -1,9 +1,14 @@
 <?php
 
-function resultToJSON($result) {
+function resultToJSON($result, $asObject=false) {
 	    
+	
     while ($data = $result->fetch_assoc()) {
      $json[] = $data;   
+    }
+    
+    if ($asObject == true) {
+    	$json = $json[0];
     }
            
     return $json;
