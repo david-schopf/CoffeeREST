@@ -17,9 +17,8 @@ class Alarm {
 			$devices [] = $data ['deviceID'];
 		}
 		
-		$userQ = "SElECT `display_name` FROM coffee_user_users WHERE id={userID} LIMIT 1";		
-		$userR = $db->query($userQ);
-		$userD = $userR->fetch_assoc();		
+		$userQ = "SElECT `display_name` FROM coffee_user_users WHERE id={$userID} LIMIT 1";			
+		$userD = resultToJSON($db->query($userQ), true);	
 		$username = $userD['display_name'];	
 		
 		$message = $username." will mit dir einen Kaffee trinken";
