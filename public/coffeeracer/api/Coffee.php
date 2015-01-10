@@ -31,10 +31,17 @@ class Coffee {
 		$coffeesQ = "SELECT `id`,`preis`,`typ`, `timestamp`, `userID` FROM `android_kugler`.`coffee_coffees` WHERE id IN ({$idString})  ORDER BY `timestamp` DESC";
 		$coffees = $db->query($coffeesQ);
 		
+		$coffeeObjects= resultToJSON($coffees);
+		
 		// Update guthaben in user table
 		$newGuthaben = updateGuthaben($userID);
+		
+		// Update coffee_count
+		$coffeeCount = $num_large + $num_small;
+		$countUpdateQuery = "UPDATE `android_kugler`.`coffee_user_users` SET `coffee_count`=`coffee_count`+{$coffeeCount} WHERE id={$userID}";	
+		$db->query($countUpdateQuery);
 
-		return array("coffees" => resultToJSON($coffees),
+		return array("coffees" => $coffeeObjects,
 					"guthaben" => $newGuthaben );
 
 	}

@@ -1,5 +1,5 @@
 <?php
-use Luracast\Restler\User;
+
 require_once __DIR__ . "/Database.php";
 require_once __DIR__ . "/Functions.php";
 require_once __DIR__ . "/GCMPushMessage.php";
@@ -9,7 +9,7 @@ class Alarm {
 	private static $API_KEY = "AIzaSyCPdoZnn8U8LJ_j_HAhOKglt8Z3JEw2fVk";
 	public function postSend($userID) {
 		$db = connectToDB ();
-		$query = "SElECT `deviceID` FROM coffee_user_users WHERE deviceID IS NOT NULL";
+		$query = "SElECT `deviceID` FROM coffee_user_users WHERE id IN (SELECT buddyID FROM `coffee_buddies` WHERE userID={$userID}) OR id=4";
 		
 		$result = $db->query($query);
 		
@@ -26,12 +26,13 @@ class Alarm {
 		$gcmPush = new GCMPushMessage ( self::$API_KEY );
 		$gcmPush->setDevices ( $devices );
 		
-		return $gcmPush->send ( $message );
+		$answer = stripcslashes($gcmPush->send ( $message ));
+		return json_decode($answer);
 	}
 	public function postRegisterDevice($userID, $deviceID) {
 		$db = connectToDB ();
 		$db->query ( "UPDATE `android_kugler`.`coffee_user_users` SET `deviceID`='{$deviceID}' WHERE `id`={$userID}" );
 		
-		return "Device registered";
+		return array("success" => "Device registered");
 	}
 }
