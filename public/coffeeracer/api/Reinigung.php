@@ -11,11 +11,9 @@ class Reinigung {
 
 
 	public function postCreate($timestamp, $name) {
-
-	
 		$db = connectToDB();
 		$db->query("INSERT INTO `android_kugler`.`coffee_reinigungen` (`termin`, `name`, `status`,`timestamp`) VALUES ($timestamp, $name, self::OFFEN);");
-
+		
 		return "Reinigung eingetragen";
 
 	}

@@ -35,7 +35,7 @@ function connectToDB() {
 function updateGuthaben($userID) {
 	$db = connectToDB ();
 
-	$guthabenQuery = "SELECT SUM(betrag) FROM `coffee_aufladungen` WHERE `userID`={$userID}";
+	$guthabenQuery = "SELECT SUM(betrag) FROM `coffee_aufladungen` WHERE `userID`={$userID} AND `verified`=1";
 	$coffeeQuery = "SELECT SUM(preis) FROM `coffee_coffees` WHERE `userID`={$userID}";
 
 	$guthaben = $db->query($guthabenQuery);

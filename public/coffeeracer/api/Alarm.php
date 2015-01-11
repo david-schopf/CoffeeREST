@@ -9,7 +9,7 @@ class Alarm {
 	private static $API_KEY = "AIzaSyCPdoZnn8U8LJ_j_HAhOKglt8Z3JEw2fVk";
 	public function postSend($userID) {
 		$db = connectToDB ();
-		$query = "SElECT `deviceID` FROM coffee_user_users WHERE id IN (SELECT buddyID FROM `coffee_buddies` WHERE userID={$userID}) OR id=4";
+		$query = "SElECT `deviceID` FROM coffee_user_users WHERE id IN (SELECT buddyID FROM `coffee_buddies` WHERE userID={$userID})";
 		
 		$result = $db->query($query);
 		
