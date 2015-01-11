@@ -10,12 +10,11 @@ class Reinigung {
 	const ERLEDIGT = 2;
 
 
-	public function postCreate($timestamp, $name) {
+	public function postCreate($termin, $timestamp, $name) {
 		$db = connectToDB();
-		$db->query("INSERT INTO `android_kugler`.`coffee_reinigungen` (`termin`, `name`, `status`,`timestamp`) VALUES ($timestamp, $name, self::OFFEN);");
-		
-		return "Reinigung eingetragen";
-
+		$query = "INSERT INTO `android_kugler`.`coffee_reinigungen` (`termin`, `name`, `status`, `timestamp`) VALUES ({$termin}, '{$name}', '1', {$timestamp})";
+		$msg = $db->query($query);
+		return array("success" => $msg);
 	}
 	
 	public function byuser($displayname) {
@@ -28,8 +27,14 @@ class Reinigung {
 
 	function termine($status) {
 		$db = connectToDB();
-
 		$result = $db->query("SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM coffee_reinigungen WHERE status=".$status." ORDER BY termin DESC");
+		return resultToJSON($result);
+	}
+	
+	function history() {
+		$db = connectToDB();
+		$result = $db->query("SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM coffee_reinigungen ORDER BY termin DESC");
+		return resultToJSON($result);
 	}
 
 
