@@ -43,6 +43,14 @@ class User {
 		
 		return array("guthaben" => $newGuthaben);
 	}
+	
+	public function aufladungen($userID) {
+		$db = connectToDB();
+		$query = "SELECT `id`,`userID`,`betrag`,`timestamp`,`code` FROM `coffee_aufladungen` WHERE `userID`=".$userID;
+		$result = $db->query ( $query );		
+		return resultToJSON ( $result );
+	}
+	
 	public function postAddBuddy($userID, $buddyID) {
 		$db = connectToDB ();
 		
@@ -74,12 +82,25 @@ class User {
 	
 	public function history($userID) {
 		
+		$db = connectToDB();
 		
+		$nameQuery = "SElECT `display_name` FROM coffee_user_users WHERE id=" . $userID . " LIMIT 1";
+		$result = $db->query ( $nameQuery );
+		$row = $result->fetch_assoc();
+		$displayname = $row['display_name'];
+		
+		$coffeesQ = "SELECT `id`,`preis`,`typ`, `timestamp`, `userID` FROM `android_kugler`.`coffee_coffees` WHERE `userID`={$userID} ORDER BY `timestamp` DESC";
+		$aufladungenQ = "SELECT `id`,`userID`,`betrag`,`timestamp`,`code` FROM `coffee_aufladungen` WHERE `userID`=".$userID;
+		$reinigungenQ = "SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM `android_kugler`.`coffee_reinigungen` WHERE  `name`='".$displayname."'";
+		
+		$coffees = resultToJSON($db->query($coffeesQ));
+		$aufladungen = resultToJSON($db->query($aufladungenQ));
+		$reinigungen = resultToJSON($db->query($reinigungenQ));
 		
 		return array (
-						"coffees" => null,
-						"aufladungen" => null,
-						"reinigungen" => null		
+						"coffees" => $coffees,
+						"aufladungen" => $aufladungen,
+						"reinigungen" => $reinigungen		
 		);
 	}
 	

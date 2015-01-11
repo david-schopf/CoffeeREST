@@ -14,16 +14,24 @@ class Reinigung {
 
 	
 		$db = connectToDB();
-		$db->query("INSERT INTO `android_kugler`.`coffee_reinigungen` (`termin`, `name`, `status`) VALUES ($timestamp, $name, self::OFFEN);");
+		$db->query("INSERT INTO `android_kugler`.`coffee_reinigungen` (`termin`, `name`, `status`,`timestamp`) VALUES ($timestamp, $name, self::OFFEN);");
 
 		return "Reinigung eingetragen";
 
+	}
+	
+	public function byuser($displayname) {
+		$db = connectToDB();
+		$reinigungenQ = "SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM `android_kugler`.`coffee_reinigungen` WHERE `name`='".$displayname."'";
+		$result = $db->query($reinigungenQ);
+		
+		return resultToJSON($result);
 	}
 
 	function termine($status) {
 		$db = connectToDB();
 
-		$result = $db->query("SELECT * FROM coffee_reinigungen WHERE status=".$status." ORDER BY termin DESC");
+		$result = $db->query("SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM coffee_reinigungen WHERE status=".$status." ORDER BY termin DESC");
 	}
 
 
