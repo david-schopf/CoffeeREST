@@ -14,8 +14,7 @@ class Bild {
 		$tempname = $bild['tmp_name'];
 		$name = $bild['name'];
 		$mime = $bild['type'];
-		return $mime;
-		
+				
 		$ext = substr($name, strripos($name, "."));
 		$filename = uniqid().$ext;
 		$path = $path = str_replace("api", "images", __DIR__);
@@ -48,11 +47,8 @@ class Bild {
 		$db = connectToDB();
 		$result = $db->query($imageQuery);
 		
-		
 		$row = $result->fetch_assoc();
 		$filename = $row['userimage'];
-		
-		$filename = "54b177c0f35ae.jpg";
 		
 		if (strlen($filename) < "6") {
 			return array("error" => "No profile picture set for user {$userID}");
