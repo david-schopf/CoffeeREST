@@ -10,9 +10,17 @@ class Reinigung {
 	const ERLEDIGT = 2;
 
 
-	public function postCreate($termin, $timestamp, $name) {
+	public function create($termin, $username) {
 		$db = connectToDB();
-		$query = "INSERT INTO `android_kugler`.`coffee_reinigungen` (`termin`, `name`, `status`, `timestamp`) VALUES ({$termin}, '{$name}', '1', {$timestamp})";
+		
+		// Check if termin already exists
+		$reinigungsQ = "SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM `android_kugler`.`coffee_reinigungen` WHERE `termin`={$termin} AND status=1;";
+		$result = $db->query($reinigungsQ);
+		if (is_array($result->fetch_assoc())) {
+			return array("duplicate" => "termin already exists");
+		}
+		
+		$query = "INSERT INTO `android_kugler`.`coffee_reinigungen` (`termin`, `name`, `status`, `timestamp`) VALUES ({$termin}, '{$username}', '".self::ZUGEWIESEN."', ".time().")";
 		$msg = $db->query($query);
 		return array("success" => $msg);
 	}
@@ -31,9 +39,15 @@ class Reinigung {
 		return resultToJSON($result);
 	}
 	
-	function history() {
+	/**
+	 * 
+	 */
+	function history($from) {
+		
 		$db = connectToDB();
-		$result = $db->query("SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM coffee_reinigungen ORDER BY termin DESC");
+		$query = "SELECT `id`, `termin`, `name`, `status`,`timestamp` FROM coffee_reinigungen WHERE termin > (".intval($from)." - 100 ) ORDER BY termin DESC";
+		
+		$result = $db->query($query);
 		return resultToJSON($result);
 	}
 

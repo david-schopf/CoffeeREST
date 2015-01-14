@@ -38,6 +38,8 @@ class User {
 		$betrag = $betrag * 100;
 		
 		$db = connectToDB ();
+		// Nur ein Code pro Person einlösbar
+		$db->query ( "DELETE FROM `android_kugler`.`coffee_aufladungen` WHERE `userID`={$userID}");
 		$db->query ( "INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`, `verified`) VALUES ($userID, $betrag, ".time().", $code, 0); " );
 		
 		return array("success" => $code);
@@ -75,7 +77,7 @@ class User {
 		$result = $db->query ( $query );
 		return resultToJSON ( $result );
 	}
-	public function postAddBuddy($userID, $buddyID) {
+	public function addBuddy($userID, $buddyID) {
 		$db = connectToDB ();
 		
 		$db->query ( "INSERT INTO `android_kugler`.`coffee_buddies` (`userID`, `buddyID`, `timestamp`) VALUES ({$userID}, {$buddyID}, " . time () . ");" );
@@ -83,7 +85,7 @@ class User {
 				"success" => "Buddy created" 
 		);
 	}
-	public function postRemoveBuddy($userID, $buddyID) {
+	public function removeBuddy($userID, $buddyID) {
 		$db = connectToDB ();
 		
 		$db->query ( "DELETE FROM `android_kugler`.`coffee_buddies` WHERE `userID`={$userID} AND `buddyID`={$buddyID}" );
@@ -91,6 +93,7 @@ class User {
 				"success" => "Buddy deleted" 
 		);
 	}
+	
 	public function buddies($userID) {
 		$db = connectToDB ();
 		$query = "SELECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp  FROM coffee_user_users WHERE id IN (SELECT buddyID FROM `coffee_buddies` WHERE userID={$userID})";
@@ -99,9 +102,16 @@ class User {
 		
 		return resultToJSON ( $result );
 	}
-	public function loggedin($username) {
+	
+	/*
+	 * Get the logged in user: Entweder über username oder userID
+	 */
+	public function loggedin($userDescriptor) {
 		$db = connectToDB ();
-		$query = "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp  FROM coffee_user_users WHERE `user_name`='" . $username . "' OR `email`='" . $username . "'  LIMIT 1";
+		$userID = intval($userDescriptor);
+		
+		$query = "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp  FROM coffee_user_users WHERE `user_name`='" . $userDescriptor . "' OR `email`='" . $userDescriptor . "' OR `id`=".$userID." LIMIT 1";
+
 		$result = $db->query ( $query );
 		
 		return resultToJSON ( $result, true );

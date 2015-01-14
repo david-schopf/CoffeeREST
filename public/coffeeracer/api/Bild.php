@@ -14,6 +14,7 @@ class Bild {
 		$tempname = $bild['tmp_name'];
 		$name = $bild['name'];
 		$mime = $bild['type'];
+		return $mime;
 		
 		$ext = substr($name, strripos($name, "."));
 		$filename = uniqid().$ext;
@@ -28,8 +29,7 @@ class Bild {
 		$db = connectToDB();
 		$db->query($imageQuery);	
 		
-		return array("moved" => $isMoved, "path" => $path."\\".$filename);				
-		
+		return array("moved" => $isMoved, "path" => $path."\\".$filename);			
 	}
 
 /**
@@ -51,6 +51,9 @@ class Bild {
 		
 		$row = $result->fetch_assoc();
 		$filename = $row['userimage'];
+		
+		$filename = "54b177c0f35ae.jpg";
+		
 		if (strlen($filename) < "6") {
 			return array("error" => "No profile picture set for user {$userID}");
 		}
