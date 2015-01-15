@@ -1,6 +1,12 @@
 <?php
 
 use Luracast\Restler\Data\Object;
+
+/**
+ * @param mysqli_result $result
+ * @param bool $asObject
+ * @return array|Object
+ */
 function resultToJSON($result, $asObject=false) {
 	    
 	$json = array();
@@ -21,6 +27,9 @@ function resultToJSON($result, $asObject=false) {
     return $json;           
 }
 
+/**
+ * @return mysqli
+ */
 function connectToDB() {
     	$db_host = "localhost"; //Host address (most likely localhost)
 		$db_name = "android_kugler"; //Name of Database

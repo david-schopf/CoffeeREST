@@ -2,19 +2,18 @@
 require_once __DIR__ . "/Database.php";
 require_once __DIR__ . "/Functions.php";
 class User {
-	public function test($to) {
-		return "success $to";
-	}
-	public function users() {
+
+	public function users($userID) {
 		$db = connectToDB ();
 		
-		$result = $db->query ( "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp FROM coffee_user_users" );
-		
+		$result = $db->query ( "SElECT u.id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp, ISNULL(b.buddyID) AS isbuddy FROM coffee_user_users AS u
+	LEFT JOIN coffee_buddies AS b ON (u.id = b.userID AND userID={$userID})" );
+
 		return resultToJSON ( $result );
 	}
 	public function data($userID) {
 		$db = connectToDB ();
-		$query = "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp FROM coffee_user_users WHERE id=" . $userID . " LIMIT 1";
+		$query = "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp, 0 AS isbuddy FROM coffee_user_users WHERE id=" . $userID . " LIMIT 1";
 		$result = $db->query ( $query );
 		
 		return resultToJSON ( $result, true );
@@ -38,7 +37,7 @@ class User {
 		$betrag = $betrag * 100;
 		
 		$db = connectToDB ();
-		// Nur ein Code pro Person einlösbar
+		// Nur ein Code pro Person einlï¿½sbar
 		$db->query ( "DELETE FROM `android_kugler`.`coffee_aufladungen` WHERE `userID`={$userID} AND `status`=0");
 		$db->query ( "INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`, `verified`) VALUES ($userID, $betrag, ".time().", $code, 0); " );
 		
@@ -96,7 +95,7 @@ class User {
 	
 	public function buddies($userID) {
 		$db = connectToDB ();
-		$query = "SELECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp  FROM coffee_user_users WHERE id IN (SELECT buddyID FROM `coffee_buddies` WHERE userID={$userID})";
+		$query = "SELECT u.id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp, 1 AS isbuddy  FROM coffee_user_users AS u INNER JOIN `coffee_buddies` AS b ON u.id=b.buddyID WHERE userID={$userID}";
 		
 		$result = $db->query ( $query );
 		
@@ -104,13 +103,13 @@ class User {
 	}
 	
 	/*
-	 * Get the logged in user: Entweder über username oder userID
+	 * Get the logged in user: Entweder durch sername oder userID
 	 */
 	public function loggedin($userDescriptor) {
 		$db = connectToDB ();
 		$userID = intval($userDescriptor);
 		
-		$query = "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp  FROM coffee_user_users WHERE `user_name`='" . $userDescriptor . "' OR `email`='" . $userDescriptor . "' OR `id`=".$userID." LIMIT 1";
+		$query = "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp, 0 AS isbuddy  FROM coffee_user_users WHERE `user_name`='" . $userDescriptor . "' OR `email`='" . $userDescriptor . "' OR `id`=".$userID." LIMIT 1";
 
 		$result = $db->query ( $query );
 		
