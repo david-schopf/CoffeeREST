@@ -5,15 +5,25 @@ class User {
 
 	public function users($userID) {
 		$db = connectToDB ();
-		
-		$result = $db->query ( "SElECT u.id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp, ISNULL(b.buddyID) AS isbuddy FROM coffee_user_users AS u
-	LEFT JOIN coffee_buddies AS b ON (u.id = b.userID AND userID={$userID})" );
+
+		$result = $db->query("SElECT u.id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp,  IF(ISNULL(b.buddyID),0,1) AS isbuddy FROM coffee_user_users AS u
+	LEFT JOIN coffee_buddies AS b ON (u.id = b.userID AND userID={$userID}) GROUP BY u.id");
 
 		return resultToJSON ( $result );
 	}
-	public function data($userID) {
+
+	/**
+	 * Returns data for a single user
+	 *
+	 * @param $userID
+	 * @param $profilID
+	 * @return array|Object
+	 */
+	public function data($userID, $profilID)
+	{
 		$db = connectToDB ();
-		$query = "SElECT id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp, 0 AS isbuddy FROM coffee_user_users WHERE id=" . $userID . " LIMIT 1";
+		$query = "SElECT u.id, user_name, display_name, email, coffee_count, guthaben, sign_up_stamp, IF(ISNULL(b.userID),0,1) AS isbuddy FROM coffee_user_users AS u
+	LEFT JOIN coffee_buddies AS b ON (u.id = b.buddyID AND userID={$userID})  WHERE u.id={$profilID} ";
 		$result = $db->query ( $query );
 		
 		return resultToJSON ( $result, true );
@@ -81,7 +91,7 @@ class User {
 		
 		$db->query ( "INSERT INTO `android_kugler`.`coffee_buddies` (`userID`, `buddyID`, `timestamp`) VALUES ({$userID}, {$buddyID}, " . time () . ");" );
 		return array (
-				"success" => "Buddy created" 
+			"success" => "created"
 		);
 	}
 	public function removeBuddy($userID, $buddyID) {
@@ -89,7 +99,7 @@ class User {
 		
 		$db->query ( "DELETE FROM `android_kugler`.`coffee_buddies` WHERE `userID`={$userID} AND `buddyID`={$buddyID}" );
 		return array (
-				"success" => "Buddy deleted" 
+			"success" => "removed"
 		);
 	}
 	
