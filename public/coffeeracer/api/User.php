@@ -39,7 +39,7 @@ class User {
 		
 		$db = connectToDB ();
 		// Nur ein Code pro Person einlösbar
-		$db->query ( "DELETE FROM `android_kugler`.`coffee_aufladungen` WHERE `userID`={$userID}");
+		$db->query ( "DELETE FROM `android_kugler`.`coffee_aufladungen` WHERE `userID`={$userID} AND `status`=0");
 		$db->query ( "INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`, `verified`) VALUES ($userID, $betrag, ".time().", $code, 0); " );
 		
 		return array("success" => $code);
