@@ -110,5 +110,5 @@ Defaults::$useUrlBasedVersioning = true;
 $r = new Restler();
 $r->setAPIVersion(2);
 $r->addAPIClass('BMI');
-$r->addAPIClass('Explorer');
+$r->addAPIClass('Resources');
 $r->handle();

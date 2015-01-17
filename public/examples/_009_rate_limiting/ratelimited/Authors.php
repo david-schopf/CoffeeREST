@@ -2,7 +2,6 @@
 namespace ratelimited;
 use Luracast\Restler\RestException;
 use DB_Session;
-use Author;
 
 class Authors
 {

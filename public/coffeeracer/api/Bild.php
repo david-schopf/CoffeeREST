@@ -7,8 +7,7 @@ require_once __DIR__ . "/Functions.php";
 class Bild {
 	
 	public function postUpload($userID) {
-				
-		
+
 		/* Get file and save it */
 		$bild = $_FILES['bild'];		
 		$tempname = $bild['tmp_name'];

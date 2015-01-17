@@ -10,6 +10,7 @@ use Illuminate\View\Engines\EngineResolver;
 use Illuminate\View\Factory;
 use Illuminate\View\FileViewFinder;
 use Illuminate\View\View;
+use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Data\Object;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\RestException;
@@ -28,9 +29,9 @@ use Luracast\Restler\Util;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc6
+ * @version    3.0.0rc5
  */
-class HtmlFormat extends DependentFormat
+class HtmlFormat extends Format
 {
     public static $mime = 'text/html';
     public static $extension = 'html';
@@ -38,7 +39,6 @@ class HtmlFormat extends DependentFormat
     public static $errorView = 'debug.php';
     public static $template = 'php';
     public static $handleSession = true;
-    public static $convertResponseToArray = false;
 
     public static $useSmartViews = true;
     /**
@@ -83,16 +83,11 @@ class HtmlFormat extends DependentFormat
         }
     }
 
-    public function getDependencyMap(){
-        return array(
-            'Illuminate\View\View' => 'illuminate/view:4.2.*',
-            'Twig_Environment' => 'twig/twig:v1.13.*',
-            'Mustache_Engine' => 'mustache/mustache:dev-master',
-        );
-    }
-
     public static function blade(array $data, $debug = true)
     {
+        if (!class_exists('\Illuminate\View\View', true))
+            throw new RestException(500,
+                'Blade templates require laravel view classes to be installed using `composer install`');
         $resolver = new EngineResolver();
         $files = new Filesystem();
         $compiler = new BladeCompiler($files, static::$cacheDirectory);
@@ -114,7 +109,7 @@ class HtmlFormat extends DependentFormat
             }
             return false;
         }, true, true);
-
+        
         $viewFinder = new FileViewFinder($files, array(static::$viewPath));
         $factory = new Factory($resolver, $viewFinder, new Dispatcher());
         $path = $viewFinder->find(self::$view);
@@ -125,6 +120,9 @@ class HtmlFormat extends DependentFormat
 
     public static function twig(array $data, $debug = true)
     {
+        if (!class_exists('\Twig_Environment', true))
+            throw new RestException(500,
+                'Twig templates require twig classes to be installed using `composer install`');
         $loader = new \Twig_Loader_Filesystem(static::$viewPath);
         $twig = new \Twig_Environment($loader, array(
             'cache' => static::$cacheDirectory,
@@ -178,6 +176,12 @@ class HtmlFormat extends DependentFormat
 
     public static function mustache(array $data, $debug = true)
     {
+        if (!class_exists('\Mustache_Engine', true))
+            throw new RestException(
+                500,
+                'Mustache/Handlebar templates require mustache classes ' .
+                'to be installed using `composer install`'
+            );
         if (!isset($data['nav']))
             $data['nav'] = array_values(Nav::get());
         $options = array(
@@ -309,9 +313,7 @@ class HtmlFormat extends DependentFormat
             $success = is_null($exception);
             $error = $success ? null : $exception->getMessage();
             $data = array(
-                'response' => static::$convertResponseToArray
-                    ? Object::toArray($data)
-                    : $data,
+                'response' => Object::toArray($data),
                 'stages' => $this->restler->getEvents(),
                 'success' => $success,
                 'error' => $error
@@ -366,19 +368,12 @@ class HtmlFormat extends DependentFormat
             if (!static::$cacheDirectory) {
                 static::$cacheDirectory = Defaults::$cacheDirectory . DIRECTORY_SEPARATOR . $template;
                 if (!file_exists(static::$cacheDirectory)) {
-                    if (!mkdir(static::$cacheDirectory, 0770, true)) {
+                    if (!mkdir(static::$cacheDirectory)) {
                         throw new RestException(500, 'Unable to create cache directory `' . static::$cacheDirectory . '`');
                     }
                 }
             }
             if (method_exists($class = get_called_class(), $template)) {
-                if ($template == 'blade') {
-                    $this->checkDependency('Illuminate\View\View');
-                } elseif ($template == 'twig') {
-                    $this->checkDependency('Twig_Environment');
-                } elseif ($template == 'mustache' || $template == 'handlebar') {
-                    $this->checkDependency('Mustache_Engine');
-                }
                 return call_user_func("$class::$template", $data, $humanReadable);
             }
             throw new RestException(500, "Unsupported template system `$template`");

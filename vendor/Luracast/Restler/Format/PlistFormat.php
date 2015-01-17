@@ -18,9 +18,9 @@ use CFPropertyList\CFPropertyList;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc6
+ * @version    3.0.0rc5
  */
-class PlistFormat extends DependentMultiFormat
+class PlistFormat extends MultiFormat
 {
     /**
      * @var boolean set it to true binary plist is preferred
@@ -81,24 +81,11 @@ class PlistFormat extends DependentMultiFormat
      */
     public function decode($data)
     {
+        //require_once 'CFPropertyList.php';
         $plist = new CFPropertyList ();
         $plist->parse($data);
 
         return $plist->toArray();
-    }
-
-    /**
-     * Get external class => packagist package name as an associative array
-     *
-     * @return array list of dependencies for the format
-     *
-     * @example return ['Illuminate\\View\\View' => 'illuminate/view:4.2.*']
-     */
-    public function getDependencyMap()
-    {
-        return array(
-            'CFPropertyList\CFPropertyList' => 'rodneyrehm/plist:dev-master'
-        );
     }
 }
 

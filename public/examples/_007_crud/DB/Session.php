@@ -55,8 +55,7 @@ class DB_Session
         $index = $this->find($id);
         if ($index === FALSE)
             return FALSE;
-        $record = array_splice($_SESSION['rs'], $index, 1);
-        return array_shift($record);
+        return array_shift(array_splice($_SESSION['rs'], $index, 1));
     }
     private function install ()
     {

@@ -1,45 +1,31 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Icon must end with two \r
-Icon
-
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
-
-.project
+.foundation
+*.tgz
+*.phar
+*.lock
+*tmp
+scratch/*
+test/reports
+bin/behat
+vendor/behat
+vendor/ChiperSoft
+vendor/composer
+vendor/guzzle
+vendor/Luracast/explorer
+vendor/autoload.php
+vendor/symfony
+vendor/mustache
+vendor/zendframework
+vendor/rodneyrehm
+vendor/twig
+vendor/illuminate
+vendor/bshaffer
+.idea
+tag.sh
+bin/*
+build/*
+build
+public/examples/_014_oauth2_client/cache
+public/examples/_015_oauth2_server/cache
+public/examples/_015_oauth2_server/OAuth2/db
+vendor/bin/behat
+public/examples/_016_forms/cache

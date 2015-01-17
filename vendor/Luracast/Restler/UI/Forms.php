@@ -5,7 +5,6 @@ use Luracast\Restler\CommentParser;
 use Luracast\Restler\Data\ApiMethodInfo;
 use Luracast\Restler\Data\String;
 use Luracast\Restler\Data\ValidationInfo;
-use Luracast\Restler\Data\Validator;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Format\UploadFormat;
 use Luracast\Restler\Format\UrlEncodedFormat;
@@ -29,7 +28,7 @@ use Luracast\Restler\Util;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc6
+ * @version    3.0.0rc5
  */
 class Forms implements iFilter
 {
@@ -191,9 +190,6 @@ class Forms implements iFilter
             static::$fileUpload = false;
             $t['enctype'] = 'multipart/form-data';
         }
-        if (isset($m[CommentParser::$embeddedDataName])) {
-            $t += $m[CommentParser::$embeddedDataName];
-        }
         if (!$dataOnly) {
             $t = Emmet::make(static::style('form', $m), $t);
             $t->prefix = $prefix;
@@ -303,7 +299,7 @@ class Forms implements iFilter
                     'value' => 'false');
                 if ($p->value || $p->default)
                     $options[0]['selected'] = true;
-            } else { //checkbox
+            } else {
                 $r = array(
                     'tag' => $tag,
                     'name' => $name,
@@ -315,9 +311,6 @@ class Forms implements iFilter
                 $r['text'] = 'Yes';
                 if ($p->default) {
                     $r['selected'] = true;
-                }
-                if (isset($p->rules)) {
-                    $r += $p->rules;
                 }
             }
         }
@@ -332,19 +325,10 @@ class Forms implements iFilter
                 'options' => & $options,
                 'multiple' => $multiple,
             );
-            if (isset($p->rules)) {
-                $r += $p->rules;
-            }
         }
         if ($type == 'file') {
             static::$fileUpload = true;
-            if (empty($r['accept'])) {
-                $r['accept'] = implode(', ', UploadFormat::$allowedMimeTypes);
-            }
-        }
-        if (!empty(Validator::$exceptions[$name]) && static::$info->url == Scope::get('Restler')->url) {
-            $r['error'] = 'has-error';
-            $r['message'] = Validator::$exceptions[$p->name]->getMessage();
+            $r['accept'] = implode(', ', UploadFormat::$allowedMimeTypes);
         }
 
         if (true === $p->required)

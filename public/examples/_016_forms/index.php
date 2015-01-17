@@ -76,7 +76,6 @@ See bootstrap3.blade.php and foundation5.blade.php
 $loader = include '../../../vendor/autoload.php';
 $loader->setUseIncludePath(true);
 
-use Luracast\Restler\Data\Validator;
 use Luracast\Restler\Restler;
 use Luracast\Restler\Defaults;
 use Luracast\Restler\Format\HtmlFormat;
@@ -85,7 +84,6 @@ use Luracast\Restler\UI\FormStyles;
 
 HtmlFormat::$viewPath = __DIR__ . '/views';
 HtmlFormat::$template = 'blade';
-Validator::$holdException = true;
 
 $themes = array(
     'amelia', 'cerulean', 'cosmo',

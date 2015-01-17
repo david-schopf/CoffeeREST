@@ -1,6 +1,9 @@
 <?php
-require_once __DIR__ . "/Database.php";
-require_once __DIR__ . "/Functions.php";
+
+
+/**
+ * @access protected
+ */
 class User {
 
 	public function users($userID) {
@@ -42,16 +45,21 @@ class User {
 		
 		return resultToJSON ( $result );
 	}
-	public function postAufladen($userID, $betrag, $code) {
-		
+	public function aufladen($userID, $betrag, $code) {
+
+		return "Hallo";
+
 		$betrag = $betrag * 100;
 		
 		$db = connectToDB ();
-		// Nur ein Code pro Person einl�sbar
+		// Nur ein Code pro Person aktiv
 		$db->query ( "DELETE FROM `android_kugler`.`coffee_aufladungen` WHERE `userID`={$userID} AND `status`=0");
-		$db->query ( "INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`, `verified`) VALUES ($userID, $betrag, ".time().", $code, 0); " );
-		
-		return array("success" => $code);
+		$saved = $db->query ( "INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`, `verified`) VALUES ($userID, $betrag, ".time().", $code, 0); " );
+
+
+		$mail =  sendCodeEmail("David",$code);
+
+		return array("success" => $mail);
 	}
 	
 	public function verifyCode($userID, $code) {

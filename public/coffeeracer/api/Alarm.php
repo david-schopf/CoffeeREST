@@ -4,6 +4,9 @@ require_once __DIR__ . "/Database.php";
 require_once __DIR__ . "/Functions.php";
 require_once __DIR__ . "/GCMPushMessage.php";
 
+/**
+ * @access protected
+ */
 class Alarm {
 	
 	private static $API_KEY = "AIzaSyCPdoZnn8U8LJ_j_HAhOKglt8Z3JEw2fVk";
@@ -55,10 +58,12 @@ class Alarm {
 	}
 	
 	
-	public function postRegisterDevice($userID, $deviceID) {
-		$db = connectToDB ();
-		$db->query ( "UPDATE `android_kugler`.`coffee_user_users` SET `deviceID`='{$deviceID}' WHERE `id`={$userID}" );
-		
+	public function postRegisterDevice($userID, $deviceID)
+	{
+		$db = connectToDB();
+		$db->query("UPDATE `android_kugler`.`coffee_user_users` SET `deviceID`='{$deviceID}' WHERE `id`={$userID}");
+
 		return array("success" => "Device registered");
 	}
+
 }

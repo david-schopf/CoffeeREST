@@ -38,5 +38,5 @@ $r = new Restler();
 // $r = new Restler(true);
 
 $r->addAPIClass('improved\\Authors');
-$r->addAPIClass('Explorer');
+$r->addAPIClass('Resources');
 $r->handle();

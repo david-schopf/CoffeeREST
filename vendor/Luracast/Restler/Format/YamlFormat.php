@@ -14,23 +14,22 @@ use Luracast\Restler\Data\Object;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc6
+ * @version    3.0.0rc5
  */
-class YamlFormat extends DependentFormat
+class YamlFormat extends Format
 {
     const MIME = 'text/plain';
     const EXTENSION = 'yaml';
 
-    const PACKAGE_NAME = 'symfony/yaml:*';
-    const EXTERNAL_CLASS = 'Symfony\Component\Yaml\Yaml';
-
     public function encode($data, $humanReadable = false)
     {
+//      require_once 'sfyaml.php';
         return @Yaml::dump(Object::toArray($data));
     }
 
     public function decode($data)
     {
+//      require_once 'sfyaml.php';
         return Yaml::parse($data);
     }
 }

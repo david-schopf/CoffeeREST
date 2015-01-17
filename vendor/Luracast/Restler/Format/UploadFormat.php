@@ -13,7 +13,7 @@ use Luracast\Restler\RestException;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc6
+ * @version    3.0.0rc5
  */
 class UploadFormat extends Format
 {
@@ -34,7 +34,7 @@ class UploadFormat extends Format
      *
      * @var array
      */
-    public static $allowedMimeTypes = array('image/jpeg', 'image/png');
+    public static $allowedMimeTypes = array();
     /**
      * use it to restrict uploads based on file size
      * set it to 0 to allow all sizes

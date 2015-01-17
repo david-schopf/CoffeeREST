@@ -2,7 +2,6 @@
 namespace Luracast\Restler;
 
 use Exception;
-use Luracast\Restler\Data\String;
 
 /**
  * Parses the PHPDoc comments for metadata. Inspired by `Documentor` code base.
@@ -14,7 +13,7 @@ use Luracast\Restler\Data\String;
  * @copyright  2010 Luracast
  * @license    http://www.opensource.org/licenses/lgpl-license.php LGPL
  * @link       http://luracast.com/products/restler/
- * @version    3.0.0rc6
+ * @version    3.0.0rc5
  */
 class CommentParser
 {
@@ -50,14 +49,6 @@ class CommentParser
      * @var string
      */
     public static $arrayDelimiter = ',';
-
-    /**
-     * @var array annotations that support array value
-     */
-    public static $allowsArrayValue = array(
-        'choice' => true,
-        'select' => true,
-    );
 
     /**
      * character sequence used to escape \@
@@ -223,9 +214,6 @@ class CommentParser
         $allowMultiple = false;
         switch ($param) {
             case 'param' :
-            case 'property' :
-            case 'property-read' :
-            case 'property-write' :
                 $value = $this->formatParam($value);
                 $allowMultiple = true;
                 break;
@@ -292,12 +280,7 @@ class CommentParser
                 $value[self::$embeddedDataName]
                     += $data[$param][self::$embeddedDataName];
             }
-            if (!is_array($data[$param])) {
-                $data[$param] = array('description' => (string) $data[$param]);
-            }
-            if (is_array($value)) {
-                $data[$param] = $value + $data[$param];
-            }
+            $data[$param] = $value + $data[$param];
         }
     }
 
@@ -327,10 +310,7 @@ class CommentParser
             }
             if ($matches[1] == 'pattern') {
                 throw new Exception('Inline pattern tag should follow {@pattern /REGEX_PATTERN_HERE/} format and can optionally include PCRE modifiers following the ending `/`');
-            } elseif (
-                isset(static::$allowsArrayValue[$matches[1]]) &&
-                false !== strpos($matches[2], static::$arrayDelimiter)
-            ) {
+            } elseif (false !== strpos($matches[2], static::$arrayDelimiter)) {
                 $matches[2] = explode(static::$arrayDelimiter, $matches[2]);
             }
             $data[$matches[1]] = $matches[2];
@@ -396,36 +376,12 @@ class CommentParser
 
     private function formatThrows(array $value)
     {
-        $code = 500;
-        $exception = 'Exception';
-        if(count($value)>1){
-            $v1 = $value[0];
-            $v2 = $value[1];
-            if(is_numeric($v1)){
-                $code = $v1;
-                $exception = $v2;
-                array_shift($value);
-                array_shift($value);
-            } elseif(is_numeric($v2)){
-                $code = $v2;
-                $exception = $v1;
-                array_shift($value);
-                array_shift($value);
-            } else {
-                $exception = $v1;
-                array_shift($value);
-            }
-        } elseif(count($value) && is_numeric($value[0])) {
-            $code = $value[0];
-            array_shift($value);
-        }
-        $message = implode(' ', $value);
-        if(!isset(RestException::$codes[$code])){
-            $code = 500;
-        } elseif(empty($message)){
-            $message = RestException::$codes[$code];
-        }
-        return compact('code','message','exception');
+        $r = array();
+        $r['code'] = count($value) && is_numeric($value[0])
+            ? intval(array_shift($value)) : 500;
+        $reason = implode(' ', $value);
+        $r['reason'] = empty($reason) ? '' : $reason;
+        return $r;
     }
 
     private function formatClass(array $value)
@@ -483,10 +439,6 @@ class CommentParser
                 $r['name'] = substr($data, 1);
             }
         }
-        if (isset($r['type']) && String::endsWith($r['type'], '[]')) {
-            $r[static::$embeddedDataName]['type'] = substr($r['type'], 0, -2);
-            $r['type'] = 'array';
-        }
         if ($value) {
             $r['description'] = implode(' ', $value);
         }
@@ -505,10 +457,6 @@ class CommentParser
         } else {
             $data = explode('|', $data);
             $r['type'] = count($data) == 1 ? $data[0] : $data;
-        }
-        if (isset($r['type']) && String::endsWith($r['type'], '[]')) {
-            $r[static::$embeddedDataName]['type'] = substr($r['type'], 0, -2);
-            $r['type'] = 'array';
         }
         if ($value) {
             $r['description'] = implode(' ', $value);
