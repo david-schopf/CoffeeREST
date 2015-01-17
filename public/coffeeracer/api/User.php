@@ -47,19 +47,18 @@ class User {
 	}
 	public function aufladen($userID, $betrag, $code) {
 
-		return "Hallo";
-
 		$betrag = $betrag * 100;
 		
 		$db = connectToDB ();
+		$usernameQ = "SELECT display_name FROM coffee_user_users WHERE id={$userID} LIMIT  1";
+		$username = resultToJSON($db->query($usernameQ), true)['display_name'];
 		// Nur ein Code pro Person aktiv
 		$db->query ( "DELETE FROM `android_kugler`.`coffee_aufladungen` WHERE `userID`={$userID} AND `status`=0");
 		$saved = $db->query ( "INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`, `verified`) VALUES ($userID, $betrag, ".time().", $code, 0); " );
 
+		$mail =  sendCodeEmail($username,$code, $betrag);
 
-		$mail =  sendCodeEmail("David",$code);
-
-		return array("success" => $mail);
+		return array("success" => $code, "email" => $mail);
 	}
 	
 	public function verifyCode($userID, $code) {

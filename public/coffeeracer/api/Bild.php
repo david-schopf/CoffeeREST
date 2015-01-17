@@ -11,7 +11,7 @@ class Bild {
 		/* Get file and save it */
 		$bild = $_FILES['bild'];		
 		$tempname = $bild['tmp_name'];
-		$name = $bild['name'];
+		$name = $bild['NAME'];
 		$mime = $bild['type'];
 				
 		$ext = substr($name, strripos($name, "."));
@@ -22,12 +22,14 @@ class Bild {
 		/*
 		 * Put it into the database
 		 */
+
+		if ($isMoved) {
+			$db = connectToDB();
+			$imageQuery = "UPDATE `android_kugler`.`coffee_user_users` SET `userimage` = '{$filename}' WHERE `coffee_user_users`.`id` = {$userID}";
+			$saved = $db->query($imageQuery);
+		}
 		
-		$imageQuery = "UPDATE `android_kugler`.`coffee_user_users` SET `userimage` = '{$filename}' WHERE `coffee_user_users`.`id` = {$userID}";
-		$db = connectToDB();
-		$db->query($imageQuery);	
-		
-		return array("moved" => $isMoved, "path" => $path."\\".$filename);			
+		return array("moved" => $isMoved, "path" => $path."\\".$filename, "database" => $saved);
 	}
 
 /**

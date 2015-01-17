@@ -65,7 +65,7 @@ function updateGuthaben($userID)
 }
 
 
-function sendCodeEmail($username, $code)
+function sendCodeEmail($username, $code, $betrag)
 {
 
     $recipientsQuery = "SELECT u.email FROM coffee_user_users AS u RIGHT JOIN
@@ -86,7 +86,8 @@ function sendCodeEmail($username, $code)
 
 # Now, compose and send your message.
     return $mg->sendMessage($domain, array('from' => 'lavidamokka@pr-android.ftm.mw.tum.de',
-        'to' => 'david.schopf@gmail.com',
-        'subject' => 'The PHP SDK is awesome! Code ' . $code,
-        'text' => 'It is so simple to send a message.'));
+        'to' => 'lavidamokka@gmail.com',
+        'subject' => "Aufladung Kaffee-Guthaben durch". $username,
+        'text' => "Der Code für die Aufladung von ".$username." über ".$betrag." € lautet: ".$code));
 	}
+
