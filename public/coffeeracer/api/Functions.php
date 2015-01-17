@@ -87,7 +87,7 @@ function sendCodeEmail($username, $code, $betrag)
 # Now, compose and send your message.
     return $mg->sendMessage($domain, array('from' => 'lavidamokka@pr-android.ftm.mw.tum.de',
         'to' => 'lavidamokka@gmail.com',
-        'subject' => "Aufladung Kaffee-Guthaben durch". $username,
+        'subject' => "Aufladung Kaffee-Guthaben ". $username,
         'text' => "Der Code für die Aufladung von ".$username." über ".$betrag." € lautet: ".$code));
 	}
 

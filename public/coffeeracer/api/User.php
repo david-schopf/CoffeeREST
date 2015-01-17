@@ -56,7 +56,7 @@ class User {
 		$db->query ( "DELETE FROM `android_kugler`.`coffee_aufladungen` WHERE `userID`={$userID} AND `status`=0");
 		$saved = $db->query ( "INSERT INTO `android_kugler`.`coffee_aufladungen` (`userID`, `betrag`, `timestamp`, `code`, `verified`) VALUES ($userID, $betrag, ".time().", $code, 0); " );
 
-		$mail =  sendCodeEmail($username,$code, $betrag);
+		$mail =  sendCodeEmail($username,$code, $betrag/100);
 
 		return array("success" => $code, "email" => $mail);
 	}
