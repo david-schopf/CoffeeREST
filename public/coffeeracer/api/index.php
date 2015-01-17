@@ -9,7 +9,7 @@ use Luracast\Restler\Format\UploadFormat;
 error_reporting(E_ALL^E_NOTICE^E_WARNING^E_STRICT);
 ini_set("display_errors",0);
 
-$r = new Restler();
+$r = new Restler(true);
 $r->addAPIClass('User');
 $r->addAPIClass('Coffee');
 $r->addAPIClass('Reinigung');

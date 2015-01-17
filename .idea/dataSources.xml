@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="3732041011">
-    <data-source source="LOCAL" name="Coffeeracer - @localhost" uuid="7dc839ca-7f5a-4491-ab99-1e6cc0b67f04">
+  <component name="DataSourceManagerImpl" format="xml" hash="2835065226">
+    <data-source source="LOCAL" name="MySQL Server" uuid="7dc839ca-7f5a-4491-ab99-1e6cc0b67f04">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+      <driver-properties>
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+        <property name="tinyInt1isBit" value="false" />
+        <property name="characterEncoding" value="utf8" />
+        <property name="characterSetResults" value="utf8" />
+        <property name="yearIsDateType" value="false" />
+      </driver-properties>
+      <libraries />
+    </data-source>
+    <data-source source="LOCAL" name="Coffeeracer - @localhost [2]" uuid="e61e9d22-a4a3-4859-8951-87db739a5775">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>

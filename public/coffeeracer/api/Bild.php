@@ -14,7 +14,7 @@ class Bild {
 		$name = $bild['NAME'];
 		$mime = $bild['type'];
 				
-		$ext = substr($name, strripos($name, "."));
+		$ext = ".jpg";
 		$filename = uniqid().$ext;
 		$path = $path = str_replace("api", "images", __DIR__);
 		$isMoved = move_uploaded_file($tempname, $path."\\".$filename);
