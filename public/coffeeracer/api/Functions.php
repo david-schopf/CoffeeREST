@@ -88,7 +88,7 @@ function sendCodeEmail($username, $code, $betrag)
     foreach ($emails as $kaffeefee ) {
         $mail_responses[] = $mg->sendMessage($domain, array('from' => 'lavidamokka@pr-android.ftm.mw.tum.de',
             'to' => $kaffeefee,
-            'subject' => "Aufladung Kaffee-Guthaben " . $username . " (" . date("d.m.Y HH:ii") . ")",
+            'subject' => "Aufladung Kaffee-Guthaben " . $username . " (" . date("d.m.Y H:i") . ")",
             'text' => "Der Code für die Aufladung von " . $username . " über " . $betrag . " € lautet: " . $code));
     }
 

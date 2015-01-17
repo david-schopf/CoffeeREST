@@ -15,7 +15,7 @@ class Bild {
 		$mime = $bild['type'];
 				
 		$ext = ".jpg";
-		$filename = uniqid().$ext;
+		$filename = md5($tempname).$ext;
 		$path = $path = str_replace("api", "images", __DIR__);
 		$isMoved = move_uploaded_file($tempname, $path."\\".$filename);
 		
@@ -23,11 +23,15 @@ class Bild {
 		 * Put it into the database
 		 */
 
-		if ($isMoved) {
+		$userID = intval($userID);
+		if ($userID > 0 == false)
+			return array("error" => "UserID stimmt nicht");
+
+
 			$db = connectToDB();
-			$imageQuery = "UPDATE `android_kugler`.`coffee_user_users` SET `userimage` = '{$filename}' WHERE `coffee_user_users`.`id` = {$userID}";
+			$imageQuery = "UPDATE `android_kugler`.`coffee_user_users` SET `userimage` = '{$filename}' WHERE id = {$userID}";
 			$saved = $db->query($imageQuery);
-		}
+
 		
 		return array("moved" => $isMoved, "path" => $path."\\".$filename, "database" => $saved);
 	}
