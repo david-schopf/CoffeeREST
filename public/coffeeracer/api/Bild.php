@@ -26,13 +26,9 @@ class Bild {
 		$userID = intval($userID);
 		if ($userID > 0 == false)
 			return array("error" => "UserID stimmt nicht");
-
-
 			$db = connectToDB();
 			$imageQuery = "UPDATE `android_kugler`.`coffee_user_users` SET `userimage` = '{$filename}' WHERE id = {$userID}";
 			$saved = $db->query($imageQuery);
-
-		
 		return array("moved" => $isMoved, "path" => $path."\\".$filename, "database" => $saved);
 	}
 
